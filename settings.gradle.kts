@@ -1,3 +1,5 @@
+include(":smooth-constraints")
+include(":smooth-redux")
 pluginManagement {
     resolutionStrategy {
         eachPlugin {
@@ -21,6 +23,26 @@ rootProject.name = ("kotlin-android-template")
 
 include(
     "app",
-    "library-android",
-    "library-kotlin"
+    "smooth-redux",
+    "smooth-redux-use-cases",
+    "smooth-constraints",
+    "smooth-constraints-ktx",
+    "smooth-constraints-android",
+    "smooth-constraints-work",
+    "smooth-store",
+    "smooth-store-memory",
+    "smooth-store-realm",
+    "smooth-store-room",
+    "smooth-store-gson",
+    "smooth-store-json-room",
+    "smooth-network",
+    "smooth-network-ktx",
+    "smooth-battery",
+    "smooth-battery-ktx",
+    "smooth-data",
+    "smooth-data-store",
+    "smooth-session",
+    "smooth-use-cases",
+    "smooth-use-cases-android",
+    "smooth-deep-link"
 )
