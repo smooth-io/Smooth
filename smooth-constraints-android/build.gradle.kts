@@ -4,9 +4,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     id("kotlin-android-extensions")
-//    id("maven-publish")
     kotlin("kapt")
-
 }
 
 android {
@@ -50,9 +48,9 @@ android {
 defaultDependencies {
     implementation(SupportLibs.ANDROIDX_APPCOMPAT)
     implementation(Startup.RUNTIME)
-    implementation(project(":smooth-constraints"))
-    implementation(project(":smooth-network"))
+    implementation(project(":smooth-use-cases"))
     implementation(project(":smooth-battery"))
+    implementation(project(":smooth-network"))
     implementation("com.nabinbhandari.android:permissions:3.8")
     coroutine()
 }

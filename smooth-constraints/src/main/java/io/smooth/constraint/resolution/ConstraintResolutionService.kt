@@ -10,13 +10,36 @@ import kotlin.reflect.KClass
 internal class ConstraintResolutionService {
 
     private val resolutionsStore =
-        PerpetualInMemoryStore<KClass<Constraint>, MutableList<Provider<ConstraintResolution<*>>>>()
+        PerpetualInMemoryStore<KClass<out Constraint<*>>, MutableList<Provider<out ConstraintResolution<*, *>>>>()
 
-    internal suspend fun addConstraintResolution(
-        constraintClass: KClass<Constraint>,
-        resolutionProvider: Provider<ConstraintResolution<*>>
+
+    internal suspend fun <C : Constraint<C>> addConstraintsResolutions(
+        constraint: Constraint<C>
     ) {
+        val resolutions = constraint.resolutions() ?: return
+        addConstraintsResolutions(constraint::class, resolutions)
+    }
 
+    internal suspend fun addConstraintsResolutions(
+        constraintClass: KClass<out Constraint<*>>,
+        resolutions: List<Provider<out ConstraintResolution<out Constraint<*>, *>>>
+    ) {
+        var resolutionsProviders = resolutionsStore.getById(constraintClass).firstOrNull()
+        if (resolutionsProviders == null) {
+            resolutionsProviders = resolutions.toMutableList()
+        } else {
+            resolutionsProviders.addAll(resolutions)
+        }
+        resolutionsStore.save(
+            Store.SaveDto(constraintClass, resolutionsProviders)
+        )
+    }
+
+
+    internal suspend fun <C : Constraint<C>> addConstraintResolution(
+        constraintClass: KClass<C>,
+        resolutionProvider: Provider<out ConstraintResolution<C, *>>
+    ) {
         var resolutionsProviders = resolutionsStore.getById(constraintClass).firstOrNull()
         if (resolutionsProviders == null) {
             resolutionsProviders = arrayListOf()
@@ -27,8 +50,10 @@ internal class ConstraintResolutionService {
         )
     }
 
-    internal suspend fun getConstraintResolutions(constraintClass: KClass<Constraint>): List<Provider<ConstraintResolution<*>>>? =
-        resolutionsStore.getById(constraintClass).firstOrNull()
+    internal suspend fun <C : Constraint<C>> getConstraintResolutions(constraintClass: KClass<C>): List<Provider<out ConstraintResolution<C, *>>>? =
+        resolutionsStore.getById(constraintClass).firstOrNull()?.map {
+            it as Provider<ConstraintResolution<C, Any>>
+        }
 
 
 }

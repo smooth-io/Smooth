@@ -8,7 +8,7 @@ import android.os.BatteryManager
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-open class BatteryServicePre21(context: Context) : BaseBatteryService(context) {
+internal open class BatteryServicePre21(context: Context) : BaseBatteryService(context) {
 
     override fun getLevelState(): BatteryLevelState =
         getBatteryDetails()?.let {

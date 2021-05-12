@@ -8,7 +8,7 @@ interface UseCaseExecutor<RequestModifier> {
 
     suspend fun <Request, Res, UC : UseCase<Request, Res>> execute(
         flow: FlowCollector<UseCaseResult<Request, Res>>,
-        constraints: List<Constraint>?,
+        constraints: List<Constraint<*>>?,
         useCase: UC,
         request: Request,
         requestModifier: RequestModifier?
@@ -18,7 +18,7 @@ interface UseCaseExecutor<RequestModifier> {
      * @return constraints that were not handled yet
      */
     fun handleConstraints(
-        constraints: List<Constraint>,
+        constraints: List<Constraint<*>>,
         requestModifier: RequestModifier?
     ): ConstraintsHandler
 

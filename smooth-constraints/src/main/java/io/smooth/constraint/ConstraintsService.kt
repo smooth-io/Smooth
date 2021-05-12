@@ -13,12 +13,14 @@ class ConstraintsService {
     private val resolutionService = ConstraintResolutionService()
 
     suspend fun check(
-        vararg constraints: Constraint
+        vararg constraints: Constraint<*>
     ): Flow<ConstraintResult> = flow {
 
-        val constraintsStatuses: MutableMap<Constraint, ConstraintStatus> = mutableMapOf()
+        val constraintsStatuses: MutableMap<Constraint<*>, ConstraintStatus> = mutableMapOf()
 
         constraints.forEach { constraint ->
+
+            resolutionService.addConstraintsResolutions(constraint)
 
             constraint.check().collect { status ->
                 constraintsStatuses[constraint] = status
@@ -30,31 +32,51 @@ class ConstraintsService {
 
     }
 
-    suspend fun addConstraintResolution(
-        constraintClass: KClass<Constraint>,
-        resolutionProvider: Provider<ConstraintResolution<*>>
+    suspend fun <C : Constraint<C>, CR : ConstraintResolution<C, *>> resolve(
+        constraint: C,
+        resolution: CR
+    ) {
+        resolution.resolve(constraint)
+    }
+
+    suspend fun <C : Constraint<C>, CR : ConstraintResolution<C, *>> getDetails(
+        constraint: C,
+        resolution: CR
+    ) = resolution.getDetails(constraint)
+
+    suspend fun addConstraintsResolutions(
+        constraintClass: KClass<out Constraint<*>>,
+        resolutions: List<Provider<out ConstraintResolution<out Constraint<*>, *>>>
+    ) {
+        resolutionService.addConstraintsResolutions(constraintClass, resolutions)
+    }
+
+    suspend fun <C : Constraint<C>> addConstraintResolution(
+        constraintClass: KClass<C>,
+        resolutionProvider: Provider<ConstraintResolution<C, *>>
     ) {
         resolutionService.addConstraintResolution(constraintClass, resolutionProvider)
     }
 
-    suspend fun getConstraintResolutions(constraintClass: KClass<Constraint>): List<Provider<ConstraintResolution<*>>>? =
+
+    suspend fun <C : Constraint<C>> getConstraintResolutions(constraintClass: KClass<C>): List<Provider<out ConstraintResolution<C, *>>>? =
         resolutionService.getConstraintResolutions(constraintClass)
 
     private fun checkConstraints(
-        constraints: Array<out Constraint>,
-        constraintsStatuses: MutableMap<Constraint, ConstraintStatus>
+        constraints: Array<out Constraint<*>>,
+        constraintsStatuses: MutableMap<Constraint<*>, ConstraintStatus>
     ): ConstraintResult {
-        if (constraintsStatuses.size != constraints.size) return ConstraintsPending()
+        if (constraintsStatuses.size != constraints.size) return ConstraintsPending(constraints)
 
-        val blockingConstraints: MutableList<Constraint> = arrayListOf()
+        val blockingConstraints: MutableList<Constraint<*>> = arrayListOf()
         constraintsStatuses.forEach {
             if (it.value == ConstraintStatus.CONSTRAINT_NOT_MET) {
                 blockingConstraints.add(it.key)
             }
         }
 
-        return if (blockingConstraints.isEmpty()) ConstraintsMet()
-        else ConstraintsNotMet(blockingConstraints)
+        return if (blockingConstraints.isEmpty()) ConstraintsMet(constraints)
+        else ConstraintsNotMet(constraints, blockingConstraints)
     }
 
     companion object {

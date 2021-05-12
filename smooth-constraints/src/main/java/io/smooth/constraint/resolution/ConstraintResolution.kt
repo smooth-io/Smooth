@@ -1,10 +1,12 @@
 package io.smooth.constraint.resolution
 
+import io.smooth.constraint.Constraint
 
-interface ConstraintResolution<Details> {
 
-    suspend fun resolve()
+interface ConstraintResolution<C : Constraint<*>, Details> {
 
-    suspend fun getDetails(): Details
+    suspend fun resolve(constraint: Constraint<*>)
+
+    suspend fun getDetails(constraint: Constraint<*>): Details
 
 }

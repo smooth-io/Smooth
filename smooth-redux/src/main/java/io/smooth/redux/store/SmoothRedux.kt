@@ -23,8 +23,8 @@ abstract class SmoothRedux<Action>(
 
     val effectsService = EffectHandlerService()
 
-    suspend inline fun <reified E : Effect> effectHandler(
-        effectHandlerProvider: Provider<EffectHandler<E>>
+    suspend inline fun <reified E : Effect, EH : EffectHandler<E>> effectHandler(
+        effectHandlerProvider: Provider<EH>
     ) {
         effectsService.assignHandler(E::class, effectHandlerProvider)
     }

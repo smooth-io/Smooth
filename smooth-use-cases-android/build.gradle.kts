@@ -44,13 +44,13 @@ android {
 }
 
 defaultDependencies {
+    coroutine()
+    startup()
     implementation(SupportLibs.ANDROIDX_APPCOMPAT)
+    implementation(WorkManager.KTX)
+    implementation(Kotlin.REFLECT)
     implementation(project(":smooth-use-cases"))
     implementation(project(":smooth-store"))
     implementation(project(":smooth-store-memory"))
-    implementation(WorkManager.RUNTIME)
-    implementation(WorkManager.KTX)
-    implementation(Kotlin.REFLECT)
-    implementation(project(":smooth-constraints-android"))
     implementation(project(":smooth-constraints-work"))
 }

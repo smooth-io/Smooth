@@ -15,15 +15,15 @@ object WorkConstraintsUtils {
 
     data class ConstraintsMappingResult(
         val workManagerConstraints: Constraints,
-        val handledConstraints: List<Constraint>,
-        val nonHandledConstraints: List<Constraint>
+        val handledConstraints: List<Constraint<*>>,
+        val nonHandledConstraints: List<Constraint<*>>
     )
 
     fun mapConstraints(
-        constraints: List<Constraint>
+        constraints: List<Constraint<*>>
     ): ConstraintsMappingResult {
 
-        val handledConstraints = arrayListOf<Constraint>()
+        val handledConstraints = arrayListOf<Constraint<*>>()
 
         val constraintsBuilder = Constraints.Builder()
 

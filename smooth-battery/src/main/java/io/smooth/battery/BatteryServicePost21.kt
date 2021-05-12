@@ -5,7 +5,7 @@ import android.content.Context.BATTERY_SERVICE
 import android.os.BatteryManager
 
 
-open class BatteryServicePost21(context: Context) : BatteryServicePre21(context) {
+internal open class BatteryServicePost21(context: Context) : BatteryServicePre21(context) {
 
     protected val batteryManager =
         context.getSystemService(BATTERY_SERVICE) as BatteryManager

@@ -4,9 +4,8 @@ plugins {
     id("com.android.library")
     kotlin("android")
     id("kotlin-android-extensions")
-//    id("maven-publish")
     kotlin("kapt")
-
+    `maven-publish`
 }
 
 android {
@@ -65,13 +64,23 @@ defaultDependencies {
     startup()
     implementation(SupportLibs.ANDROIDX_APPCOMPAT)
 }
-//
-//afterEvaluate {
-//    publishing {
-//        publications {
-//            create<MavenPublication>("release") {
-//                from(components["release"])
-//            }
+
+//val sourcesJar by tasks.registering(Jar::class) {
+//    classifier = "sources"
+//    from(sourceSets.main.get().allSource)
+//}
+
+publishing {
+//    repositories {
+//        maven {
+//             change to point to your repo, e.g. http://my.org/repo
+//            url = uri("$buildDir/repo")
 //        }
 //    }
-//}
+//    publications {
+//        register("mavenJava", MavenPublication::class) {
+//            from(components["java"])
+////            artifact(sourcesJar.get())
+//        }
+//    }
+}

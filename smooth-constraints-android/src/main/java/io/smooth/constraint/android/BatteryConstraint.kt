@@ -3,15 +3,18 @@ package io.smooth.constraint.android
 import io.smooth.battery.*
 import io.smooth.constraint.Constraint
 import io.smooth.constraint.ConstraintStatus
+import io.smooth.constraint.resolution.ConstraintResolution
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
+import javax.inject.Provider
 
 class BatteryConstraint(
     val requiredBatteryLevel: BatteryLevelState? = BatteryLevelState.GOOD,
-    val requiredBatteryChargingState: BatteryChargingState? = null,
-    private val batteryService: SmoothBatteryService
-) : Constraint {
+    val requiredBatteryChargingState: BatteryChargingState? = null
+) : Constraint<BatteryConstraint> {
+
+    private val batteryService = SmoothBatteryService.getInstance()
 
     override suspend fun check(): Flow<ConstraintStatus> = flow {
         batteryService.listen().collect {
@@ -42,5 +45,9 @@ class BatteryConstraint(
             else emit(ConstraintStatus.CONSTRAINT_NOT_MET)
         }
     }
+
+    override fun resolutions(): List<Provider<out ConstraintResolution<out BatteryConstraint, *>>>? =
+        null
+
 
 }

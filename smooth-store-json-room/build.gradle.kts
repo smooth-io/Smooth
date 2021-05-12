@@ -4,7 +4,6 @@ plugins {
     id("com.android.library")
     kotlin("android")
     id("kotlin-android-extensions")
-//    id("maven-publish")
     kotlin("kapt")
 }
 
@@ -53,13 +52,3 @@ defaultDependencies {
     implementation(project(":smooth-store-room"))
     implementation(Ktx.FLOW)
 }
-//
-//afterEvaluate {
-//    publishing {
-//        publications {
-//            create<MavenPublication>("release") {
-//                from(components["release"])
-//            }
-//        }
-//    }
-//}

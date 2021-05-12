@@ -21,7 +21,7 @@ class Failed<Req, Res>(
 class Progress<Req, Res>(
     val req: Req,
     val progress: Float,
-    val metaData: Map<String, *>
+    val metaData: Map<String, *>?
 ) : UseCaseResult<Req, Res>()
 
 class ConstraintsPending<Req, Res>(
@@ -31,5 +31,5 @@ class ConstraintsPending<Req, Res>(
 
 class ConstraintsNotMet<Req, Res>(
     val req: Req,
-    val blockingConstraints: List<Constraint>
+    val blockingConstraints: List<Constraint<*>>
 ) : UseCaseResult<Req, Res>()

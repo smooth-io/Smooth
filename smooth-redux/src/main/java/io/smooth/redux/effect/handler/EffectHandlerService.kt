@@ -13,9 +13,9 @@ class EffectHandlerService {
     private val eventsHandlerStore =
         PerpetualInMemoryStore<KClass<out Effect>, Provider<EffectHandler<*>>>()
 
-    suspend fun <E : Effect> assignHandler(
+    suspend fun <E : Effect, EH : EffectHandler<E>> assignHandler(
         effectClass: KClass<E>,
-        handlerProvider: Provider<EffectHandler<E>>
+        handlerProvider: Provider<EH>
     ) {
         eventsHandlerStore.save(
             Store.SaveDto(effectClass, handlerProvider as Provider<EffectHandler<*>>)

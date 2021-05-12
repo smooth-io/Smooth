@@ -2,17 +2,12 @@ package io.smooth.constraint.android.initializer
 
 import android.content.Context
 import androidx.startup.Initializer
-import io.smooth.constraint.manager.ConstraintsManager
+import io.smooth.constraint.ConstraintsService
 
-class ConstraintsManagerInitializer : Initializer<ConstraintsManager> {
+class ConstraintsManagerInitializer : Initializer<ConstraintsService> {
 
-    override fun create(context: Context): ConstraintsManager {
-        if (context is ConstraintsConfig) {
-            ConstraintsManager.init(context.provideConstraintsProvider())
-        } else {
-            throw IllegalArgumentException("Application class must implement ${ConstraintsConfig::class} in order for constraints manager to work")
-        }
-        return ConstraintsManager.getInstance()
+    override fun create(context: Context): ConstraintsService {
+        return ConstraintsService.getInstance()
     }
 
     override fun dependencies(): MutableList<Class<out Initializer<*>>> = arrayListOf()

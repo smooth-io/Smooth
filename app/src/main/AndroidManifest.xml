@@ -15,10 +15,10 @@
         tools:targetApi="p"
         tools:ignore="AllowBackup">
 
-        <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
-            tools:node="remove"/>
+<!--        <provider-->
+<!--            android:name="androidx.work.impl.WorkManagerInitializer"-->
+<!--            android:authorities="${applicationId}.workmanager-init"-->
+<!--            tools:node="remove"/>-->
 
 
         <activity android:name=".MainActivity">

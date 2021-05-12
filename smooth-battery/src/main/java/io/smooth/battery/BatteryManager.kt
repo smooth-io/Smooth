@@ -2,7 +2,7 @@ package io.smooth.battery
 
 import kotlinx.coroutines.flow.Flow
 
-interface BatteryManager {
+internal interface BatteryManager {
 
     fun listen(): Flow<BatteryState>
 

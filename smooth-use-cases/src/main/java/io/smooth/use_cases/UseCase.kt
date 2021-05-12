@@ -21,7 +21,7 @@ abstract class UseCase<Req, Res> {
 
     protected suspend fun FlowCollector<ExecutionResult<*>>.progress(
         progress: Float,
-        metaData: Map<String, *>
+        metaData: Map<String, *>? = null
     ) {
         emit(ProgressResult<Any>(progress, metaData))
     }

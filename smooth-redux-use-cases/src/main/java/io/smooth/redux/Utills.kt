@@ -19,11 +19,11 @@ suspend fun <Req, Res, UC : UseCase<Req, Res>, RequestModifier> DefaultRedux<*, 
     request: Req,
     onSuccess: suspend SafeRunner.(result: Success<Req, Res>) -> Unit,
     middlewares: List<Middleware<Req, Res, UC>>? = null,
-    constraints: List<Constraint>? = null,
+    constraints: List<Constraint<*>>? = null,
     modify: RequestModifier.() -> Unit = {}
 ) = runLce(useCaseClass) {
 
-    UseCaseService.getInstance()
+    UseCasesService.getInstance()
         .execute(
             executorClass,
             useCaseClass,
@@ -102,7 +102,7 @@ suspend fun <Req, Res, UC : UseCase<Req, Res>, RequestModifier> DefaultRedux<*, 
     request: Req,
     onSuccess: suspend SafeRunner.(result: Success<Req, Res>) -> Unit,
     middlewares: List<Middleware<Req, Res, UC>>? = null,
-    constraints: List<Constraint>? = null,
+    constraints: List<Constraint<*>>? = null,
     modify: RequestModifier.() -> Unit = {}
 ) {
     runUseCase(executorClass, useCaseClass, request, onSuccess, middlewares, constraints, modify)

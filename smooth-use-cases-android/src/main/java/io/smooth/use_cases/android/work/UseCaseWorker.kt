@@ -17,7 +17,7 @@ class UseCaseWorker(
     private val params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
-    val useCaseService = UseCaseService.getInstance()
+    val useCaseService = UseCasesService.getInstance()
     val workManagerExecutor = WorkManagerUseCaseExecutor.getInstance()
 
     override suspend fun doWork(): Result = withContext(Dispatchers.IO) {

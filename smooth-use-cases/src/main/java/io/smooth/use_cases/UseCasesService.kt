@@ -9,7 +9,7 @@ import io.smooth.use_cases.provider.UseCasesProvider
 import kotlinx.coroutines.flow.*
 import kotlin.reflect.KClass
 
-class UseCaseService(private val provider: UseCasesProvider) {
+class UseCasesService(private val provider: UseCasesProvider) {
 
     fun getUseCase(
         useCaseClass: KClass<UseCase<Any, Any>>
@@ -27,7 +27,7 @@ class UseCaseService(private val provider: UseCasesProvider) {
         useCaseClass: KClass<UC>,
         request: Req,
         middlewares: List<Middleware<Req, Res, UC>>? = null,
-        constraints: List<Constraint>? = null,
+        constraints: List<Constraint<*>>? = null,
         modify: RequestModifier.() -> Unit = {}
     ): Flow<UseCaseResult<Req, Res>> = flow {
 
@@ -99,7 +99,7 @@ class UseCaseService(private val provider: UseCasesProvider) {
 
     private suspend fun <Req, Res, UC : UseCase<Req, Res>, RequestModifier> FlowCollector<UseCaseResult<Req, Res>>.onConstraintsMet(
         executor: UseCaseExecutor<RequestModifier>,
-        constraints: List<Constraint>?,
+        constraints: List<Constraint<*>>?,
         useCaseClass: KClass<UC>,
         request: Req,
         requestModifier: RequestModifier?
@@ -125,13 +125,13 @@ class UseCaseService(private val provider: UseCasesProvider) {
     }
 
     companion object {
-        private var instance: UseCaseService? = null
+        private var instance: UseCasesService? = null
 
         fun init(provider: UseCasesProvider) {
-            instance = UseCaseService(provider)
+            instance = UseCasesService(provider)
         }
 
-        fun getInstance(): UseCaseService = instance!!
+        fun getInstance(): UseCasesService = instance!!
     }
 
 }

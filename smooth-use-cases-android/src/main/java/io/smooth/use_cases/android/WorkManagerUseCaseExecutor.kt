@@ -16,17 +16,14 @@ import kotlinx.coroutines.flow.firstOrNull
 
 class WorkManagerUseCaseExecutor(
     private val workManager: WorkManager,
-    private val hasRequestsStore: HasRequestsStore
-) : UseCaseExecutor<WorkManagerUseCaseExecutor.RequestModifier>, HasRequestsStore {
+    private val requestsStore: DataConverterStore<String, Any, String>
+) : UseCaseExecutor<WorkManagerUseCaseExecutor.RequestModifier> {
 
     private val requestFlowCollectorsStores: Store<String, FlowCollector<UseCaseResult<*, *>>> =
         PerpetualInMemoryStore()
 
-    override fun getRequestsStore(): DataConverterStore<String, Any, String> =
-        hasRequestsStore.getRequestsStore()
-
     suspend fun getRequest(requestId: String): Any? =
-        getRequestsStore().getById(requestId).firstOrNull()
+        requestsStore.getById(requestId).firstOrNull()
 
     internal suspend fun getRequestFlowCollector(requestId: String): FlowCollector<UseCaseResult<*, *>>? =
         requestFlowCollectorsStores.getById(requestId).firstOrNull()
@@ -37,7 +34,7 @@ class WorkManagerUseCaseExecutor(
 
     override suspend fun <Request, Res, UC : UseCase<Request, Res>> execute(
         flow: FlowCollector<UseCaseResult<Request, Res>>,
-        constraints: List<Constraint>?,
+        constraints: List<Constraint<*>>?,
         useCase: UC,
         request: Request,
         requestModifier: RequestModifier?
@@ -67,7 +64,7 @@ class WorkManagerUseCaseExecutor(
                     requestId, requestFlowCollectorsStores as FlowCollector<UseCaseResult<*, *>>
                 )
             )
-            getRequestsStore().save(
+            requestsStore.save(
                 Store.SaveDto(requestId, request as Any)
             )
 
@@ -79,7 +76,7 @@ class WorkManagerUseCaseExecutor(
     }
 
     override fun handleConstraints(
-        constraints: List<Constraint>,
+        constraints: List<Constraint<*>>,
         requestModifier: RequestModifier?
     ): ConstraintsHandler {
         val constraintsMappingResult = WorkConstraintsUtils.mapConstraints(constraints)
@@ -99,8 +96,8 @@ class WorkManagerUseCaseExecutor(
 
         private var instance: WorkManagerUseCaseExecutor? = null
 
-        fun init(workManager: WorkManager, hasRequestsStore: HasRequestsStore) {
-            instance = WorkManagerUseCaseExecutor(workManager, hasRequestsStore)
+        fun init(workManager: WorkManager, requestsStore: DataConverterStore<String, Any, String>) {
+            instance = WorkManagerUseCaseExecutor(workManager, requestsStore)
         }
 
         fun getInstance(): WorkManagerUseCaseExecutor =

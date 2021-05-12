@@ -10,7 +10,7 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
-                android:name="io.smooth.use_cases.android.init.UseCasesManagerInitializer"
+                android:name="io.smooth.use_cases.android.starter.UseCasesInitializer"
                 android:value="androidx.startup" />
         </provider>
 

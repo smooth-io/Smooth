@@ -5,13 +5,14 @@ import android.content.pm.PackageManager
 import androidx.core.app.ActivityCompat
 import com.nabinbhandari.android.permissions.PermissionHandler
 import com.nabinbhandari.android.permissions.Permissions
-import io.smooth.constraint.BaseConstraint
 import io.smooth.constraint.Constraint
 import io.smooth.constraint.ConstraintStatus
+import io.smooth.constraint.resolution.ConstraintResolution
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import javax.inject.Provider
 
 
 class PermissionConstraint(
@@ -19,7 +20,7 @@ class PermissionConstraint(
     private val requiredPermissions: Array<String>,
     private val rationale: String? = null,
     private val options: Permissions.Options? = null
-) : Constraint {
+) : Constraint<PermissionConstraint> {
 
     override suspend fun check(): Flow<ConstraintStatus> = flow {
         Permissions.check(
@@ -53,5 +54,8 @@ class PermissionConstraint(
         }
         return true
     }
+
+    override fun resolutions(): List<Provider<out ConstraintResolution<out PermissionConstraint, *>>>? =
+        null
 
 }

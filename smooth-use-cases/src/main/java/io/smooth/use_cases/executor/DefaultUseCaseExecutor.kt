@@ -11,7 +11,7 @@ class DefaultUseCaseExecutor : UseCaseExecutor<DefaultUseCaseExecutor.RequestMod
 
     override suspend fun <Request, Res, UC : UseCase<Request, Res>> execute(
         flow: FlowCollector<UseCaseResult<Request, Res>>,
-        constraints: List<Constraint>?,
+        constraints: List<Constraint<*>>?,
         useCase: UC,
         request: Request,
         requestModifier: RequestModifier?
@@ -26,7 +26,7 @@ class DefaultUseCaseExecutor : UseCaseExecutor<DefaultUseCaseExecutor.RequestMod
         }
     }
 
-    override fun handleConstraints(constraints: List<Constraint>, requestModifier: RequestModifier?): ConstraintsHandler =
+    override fun handleConstraints(constraints: List<Constraint<*>>, requestModifier: RequestModifier?): ConstraintsHandler =
         ConstraintsHandler(
             null,
             constraints

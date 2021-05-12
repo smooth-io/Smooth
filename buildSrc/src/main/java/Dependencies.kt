@@ -55,7 +55,7 @@ object DI {
     const val HILT_CLASS_PATH =
         "com.google.dagger:hilt-android-gradle-plugin:${Versions.HILT_VERSION}"
     const val HILT_IMPL = "com.google.dagger:hilt-android:${Versions.HILT_VERSION}"
-    const val HILT_KAPT = "com.google.dagger:hilt-compiler${Versions.HILT_VERSION}"
+    const val HILT_KAPT = "com.google.dagger:hilt-compiler:${Versions.HILT_VERSION}"
 
     const val DAGGER = "com.google.dagger:dagger:${Versions.DAGGER}"
     const val DAGGER_COMPILER = "com.google.dagger:dagger-compiler:${Versions.DAGGER}"

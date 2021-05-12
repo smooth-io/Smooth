@@ -147,29 +147,29 @@ class SmoothNetworkService(private val context: Context) {
 
     fun isRoaming(networkInfo: NetworkInfo): Boolean = networkInfo.isRoaming
 
-    fun getNetworkDetails(context: Context): NetworkDetails =
-        getNetworkConnectivityManager(context).let {
+    fun getNetworkDetails(): NetworkDetails =
+        getNetworkConnectivityManager().let {
             getNetworkDetails(
                 it,
                 it.activeNetworkInfo
             )
         }
 
-    fun isConnected(context: Context): Boolean =
-        getNetworkConnectivityManager(context).let {
+    fun isConnected(): Boolean =
+        getNetworkConnectivityManager().let {
             isConnected(it.activeNetworkInfo)
         }
 
-    fun isMetered(context: Context): Boolean =
-        isMetered(getNetworkConnectivityManager(context))
+    fun isMetered(): Boolean =
+        isMetered(getNetworkConnectivityManager())
 
-    fun isRoaming(context: Context): Boolean =
-        getNetworkConnectivityManager(context).activeNetworkInfo.let {
+    fun isRoaming(): Boolean =
+        getNetworkConnectivityManager().activeNetworkInfo.let {
             if (it == null) return false
             isRoaming(it)
         }
 
-    private fun getNetworkConnectivityManager(context: Context): ConnectivityManager =
+    private fun getNetworkConnectivityManager(): ConnectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
     companion object {

@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.onSubscription
 
-abstract class BaseBatteryService(protected val context: Context) : BatteryManager {
+internal abstract class BaseBatteryService(protected val context: Context) : BatteryManager {
 
     private val batteryListenerFlow: MutableSharedFlow<BatteryState> = MutableSharedFlow(0)
 
